@@ -19,7 +19,7 @@ var EnumEstadoCartas = {
 MemoryGame = function(gs) {
     this.cartas = [];
     this.finJuego = true;
-    this.mensaje = "Comenzamos";
+    this.mensaje = "El cutrejuego de monix";
     this.graphics = gs;
 
     this.parejaCartasAcertadas = 0;
@@ -99,7 +99,7 @@ MemoryGame = function(gs) {
             this.cartas[i].draw(this.graphics, i);
         }
         if (this.__checkEnd()) {
-            this.mensaje = "Enhorabuena, has ganado!";
+            this.mensaje = "Ganaste el juego más facil de todos :D";
             this.graphics.drawMessage(this.mensaje);
             clearInterval(this.timer);
         }
