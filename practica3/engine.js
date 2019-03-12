@@ -24,7 +24,7 @@ var Game = new function() {
 
 
   // le asignamos un nombre lógico a cada tecla que nos interesa
-  var KEY_CODES = { 37:'left', 39:'right', 32 :'fire' };
+  var KEY_CODES = { 37:'left', 39:'right', 32 :'fire', 38:'up', 40:'down' };
 
   this.keys = {};
 
@@ -42,6 +42,8 @@ var Game = new function() {
        e.preventDefault();
       }
     },false);
+
+    
   }
 
 

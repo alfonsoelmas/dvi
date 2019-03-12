@@ -19,7 +19,7 @@ var sprites = {
  fondo: {sx: 421, sy:0, w:546, h:625, frames:1},
  
  mosca:{sx: 56, sy:236, w:37, h:40, frames:1},
- rana:{sx: 0, sy:338, w:37, h:51, frames:7},
+ rana:{sx: -3, sy:338, w:40, h:51, frames:7},
  tortuga:{sx: 0, sy:285, w:54, h:47, frames:7},
  tortuga_hundir: {sx: 280, sy:339, w:54, h:49, frames:2},
  titulo: {sx: 5, sy:393, w:265, h:173, frames:1}
@@ -60,16 +60,56 @@ Sprite.prototype.hit = function(damage) {
   this.board.remove(this);
 }
 
-var posicionesTablero = //TODO
+//var posicionesTablero = //TODO
 
 
 //PLAYER-FROG
-var PlayerFrog = function() {
+/*var PlayerFrog = function() {
   this.setup('rana',{vx: 0, frame: 0, reloadTime:0.25, maxVel: 200});
   this.x = Game.width/2 - this.w/2; 
-}
+}*/
 
 // PLAYER
+
+var Frog = function() {
+  this.setup('rana',{ vx: 0, frame: 0, reloadTime: 0.25, maxVel: 0, up: false, saltoLateral:50, saltoFrontal:48 });
+  this.x = Game.width/2 - this.w / 2;
+  this.y = Game.height - this.h + 5;
+  this.subFrame = 0;
+  this.animate = false;
+
+   this.step = function(dt) {
+
+     if(Game.keys['left'] && this.up) { this.x += -this.saltoLateral; this.up=false}
+     else if(Game.keys['right'] && this.up) { this.x += this.saltoLateral; this.up=false}
+     else if(!Game.keys['left'] && !Game.keys['right'] && !Game.keys['up'] && !Game.keys['down']) {this.up = true;}
+     else if(Game.keys['up'] && this.up){this.y += -this.saltoFrontal; this.up=false;
+      this.animate = true;
+     }
+     else if(Game.keys['down'] && this.up){this.y += this.saltoFrontal; this.up=false;
+
+     }
+     if(this.animate){
+      this.frame = Math.floor(this.subFrame++);
+      if(this.subFrame == 7){ this.subFrame = 0; this.animate=false; this.frame=0;}
+    }
+
+     if(this.x < 0) { this.x = 0; }
+     else if(this.x > Game.width - this.w) { 
+       this.x = Game.width - this.w;
+     }
+     if(this.y <0){this.y=0;}
+     else if(this.y>Game.height-this.h) {
+      this.y = Game.height - this.h;
+     }
+
+  }
+
+}
+
+Frog.prototype = new Sprite();
+Frog.prototype.type = OBJECT_PLAYER;
+
 
 var PlayerShip = function() { 
 
@@ -163,7 +203,7 @@ Enemy.prototype.baseParameters = { A: 0, B: 0, C: 0, D: 0,
                                    t: 0, health: 20, damage: 10 };
 
 
-Enemy.prototype.type = OBJECT_ENEMY;
+/*Enemy.prototype.type = OBJECT_ENEMY;
 
 Enemy.prototype.step = function(dt) {
   this.t += dt;
@@ -196,7 +236,7 @@ Enemy.prototype.hit = function(damage) {
 
 }
 
-
+*/
 
 
 
@@ -209,24 +249,12 @@ var FondoJuego = function(clear) {
   dimens.height = Game.height;
   var fondoCtx = dimens.getContext("2d");
 
-  // If the clear option is set, 
-  // make the background black instead of transparent
-  if(clear) {
-    starCtx.fillStyle = "#000";
-    starCtx.fillRect(0,0,stars.width,stars.height);
-  }
-
-  // This method is called every frame
-  // to draw the starfield onto the canvas
   this.draw = function(ctx) {
     SpriteSheet.draw(ctx,"fondo",0,0,0);
   }
 
-  // This method is called to update
-  // the starfield
   this.step = function(dt) {
-    offset += dt * speed;
-    offset = offset % stars.height;
+    //No hace nada
   }
 }
 
