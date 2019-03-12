@@ -60,7 +60,14 @@ Sprite.prototype.hit = function(damage) {
   this.board.remove(this);
 }
 
+var posicionesTablero = //TODO
 
+
+//PLAYER-FROG
+var PlayerFrog = function() {
+  this.setup('rana',{vx: 0, frame: 0, reloadTime:0.25, maxVel: 200});
+  this.x = Game.width/2 - this.w/2; 
+}
 
 // PLAYER
 
