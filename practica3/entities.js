@@ -499,15 +499,29 @@ var Spawner = function(lvl,fila, tipo) {
   var min = Game.width/2;
   var creador = -1;
   this.cntFrecuencia = 50;
+  
+  
 
   this.step = function(dt) {
     this.frecuencia += (this.cntFrecuencia * dt * this.lvl);
 
 
     if(creador==-1){
-
-      creador =  Math.floor(Math.random() * (max - min)) + min;
-      if(tipo==0) creador+=100;
+		//tamaño posicion array elementos a generar
+		  var tam = this.elementos.length;
+		  //instanciamos nuevo objeto de ese elemento
+		  var pos = Math.floor((Math.random() * tam));
+		  if(this.tipo==0)
+			this.board.add(new Vehicle(this.elementos[pos][0],this.elementos[pos][1], this.elementos[pos][2]));
+		  else{
+			if(this.elementos[pos][0]=="turtle"){
+			  this.board.addFront(new Turtle(this.elementos[pos][1], this.elementos[pos][2]));
+			} else {
+			  this.board.addFront(new Trunk(this.elementos[pos][0],this.elementos[pos][1], this.elementos[pos][2]));
+			}
+		  }
+		creador =  Math.floor(Math.random() * (max - min)) + min;
+		if(tipo==0) creador+=200;
     }
    if(this.frecuencia > creador) //CONDICION DE FRECUENCIA DE CREACION DEL OBJETO
    {
