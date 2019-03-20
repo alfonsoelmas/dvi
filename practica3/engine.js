@@ -47,7 +47,7 @@ var Game = new function() {
   }
 
 
-  var boards = [];
+  boards = [];
 
   //var fps = 45;
   var toSkip = 0;
@@ -164,12 +164,14 @@ var SpriteSheet = new function() {
 
 //// TITLE
 
-var TitleScreen = function TitleScreen(title,subtitle,callback) {
+var TitleScreen = function TitleScreen(title,subtitle,callback,lvl) {
   var up = false;
 
   this.step = function(dt) {
     if( ! Game.keys['fire'] ) up = true;
-    if( up && Game.keys['fire'] && callback ) callback();
+    if( up && Game.keys['fire'] && callback ){
+      callback(lvl);
+    }
   };
 
   this.draw = function(ctx) {
@@ -177,11 +179,7 @@ var TitleScreen = function TitleScreen(title,subtitle,callback) {
     ctx.textAlign = "center";
 
     if(title == "inicio"){
-      //Pintamos el sprite de "frogger"
-      //TODO
-
-      
-
+      SpriteSheet.draw(ctx,'titulo',(Game.width-sprites['titulo'].w)/2,(Game.height-sprites['titulo'].h)/2,this.frame);
 
     }
     else {
@@ -210,6 +208,14 @@ var GameBoard = function() {
   this.add = function(obj) { 
     obj.board=this; 
     this.objects.push(obj); 
+    this.cnt[obj.type] = (this.cnt[obj.type] || 0) + 1;
+    return obj; 
+  };
+
+  this.addFront = function(obj) {
+    obj.board=this; 
+    //this.objects.push(obj);
+    this.objects.unshift(obj); 
     this.cnt[obj.type] = (this.cnt[obj.type] || 0) + 1;
     return obj; 
   };
@@ -270,8 +276,8 @@ var GameBoard = function() {
   };
 
   this.overlap = function(o1,o2) {
-    return !((o1.y+o1.h-1 < o2.y) || (o1.y > o2.y+o2.h-1) ||
-             (o1.x+o1.w-1 < o2.x) || (o1.x > o2.x+o2.w-1));
+    return !((o1.y+o1.h-6 < o2.y) || (o1.y > o2.y+o2.h-6) ||
+             (o1.x+o1.w-13 < o2.x) || (o1.x > o2.x+o2.w-13));
   };
 
   this.collide = function(obj,type) {
