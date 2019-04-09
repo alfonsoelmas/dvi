@@ -1,3 +1,14 @@
+/*
+Práctica 4 para la asignatura de DVI
+____________________________________
+Lógica juego: Super mario
+Autor: Alfonso Soria Muñoz
+Institución: Universiad complutense de madrid
+Licencia Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+Motor de juego: Quintus
+Comentarios: Este es un clon simple del juego Super Mario Bross realizado utilizando Quintus y tecnologías WEB.
+*/
+
 var game = function() {
     //Iniciamos el Quintus y todos sus módulos
     var Q = Quintus({audioSupported: [ "mp3","ogg" ] }).include("Scenes, Sprites, Input, UI, Touch, TMX, Anim, 2D, Anim, Audio").setup({
@@ -6,12 +17,12 @@ var game = function() {
         maximize: true
     }).controls().touch();
    
-    Q.audio.enableHTML5Sound(); //Para permitir el audio en HTML5
+    Q.audio.enableHTML5Sound(); //Activa el audio
 
 
-/* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                            ANIMACIONES
-   -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+/*===========================================================================================
+=======================================ANIMACIONES===========================================
+=============================================================================================*/
 
 
     Q.animations("mario", {
@@ -24,14 +35,13 @@ var game = function() {
 		dieM: { frames: [12], rate:1, loop: false, trigger: "deadM"}
     });
 
+    Q.animations("coin", {
+        rotate: { frames: [0, 1, 2], rate: 1/6, loop:true}
+    });
+	
     Q.animations("goombaRed", {
         move: { frames: [0, 1], rate: 1/3, loop:true},
         dieE: { frames: [2], loop:false, trigger: "deadG" }
-    });
-
-    Q.animations("goombaBlue", {
-        move: { frames: [4, 5], rate: 1/3, loop:true},
-        dieE: { frames: [6], loop:false, trigger: "deadG" }
     });
 
     Q.animations("goombaWhite", {
@@ -39,8 +49,9 @@ var game = function() {
         dieE: { frames: [10], loop:false, trigger: "deadG" }
     });
    
-    Q.animations("coin", {
-        rotate: { frames: [0, 1, 2], rate: 1/6, loop:true}
+    Q.animations("goombaBlue", {
+        move: { frames: [4, 5], rate: 1/3, loop:true},
+        dieE: { frames: [6], loop:false, trigger: "deadG" }
     });
 
     Q.animations("block", {
@@ -54,26 +65,32 @@ var game = function() {
     });
 
 
-/* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                            LEVEL 1
-   -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+/*===========================================================================================
+=======================================NIVEL=1===============================================
+=============================================================================================*/
     Q.scene("level1",function(stage) {
         Q.audio.stop();
         Q.audio.play("music_main.mp3",{ loop: true });
         Q.stageTMX("level.tmx",stage);
 
-        //Todos los componentes del nivel 1
+        /*Añadimos los componentes del nivel 1 en nuestro escenario*/
+	//Protagonista
         var mario = stage.insert(new Q.Mario({ x: 150, y: 380 }));
+	//Setas malvadas
         var goomba1 = stage.insert(new Q.Goomba({ x: 425, y: 500, velocidad: -80, sprite: "goombaRed"}));
         var goomba2 = stage.insert(new Q.Goomba({ x: 550, y: 500, sprite: "goombaBlue"}));
         var goomba3 = stage.insert(new Q.Goomba({ x: 1500, y: 500, sprite: "goombaWhite"}));
         var goomba4 = stage.insert(new Q.Goomba({ x: 1150, y: 500, velocidad: -80, sprite: "goombaRed"}));
+	//Bloopas
         var bloopa1 = stage.insert(new Q.Bloopa({ x: 220, y: 450 }));
         var bloopa2 = stage.insert(new Q.Bloopa({ x: 1150, y: 290, vx: -60, gravity: .6 }));
+	//Peach
         var princess = stage.insert(new Q.Princess({ x: 2000, y: 450 }));
+	//Monedas
         var coin1 = stage.insert(new Q.Coin({ x: 700, y: 420 }));
         var coin2 = stage.insert(new Q.Coin({ x: 730, y: 420 }));
         var coin3 = stage.insert(new Q.Coin({ x: 760, y: 420 }));
+	//Bloques
         var bloque1 = stage.insert(new Q.Block({ x: 1410, y: 380}));
         var bloque2 = stage.insert(new Q.BlockCoins({ x: 500, y: 420}));
         var bloque3 = stage.insert(new Q.BlockNada({ x: 466, y: 420}));
@@ -82,14 +99,16 @@ var game = function() {
         var bloque6 = stage.insert(new Q.BlockNada({ x: 1100, y: 410}));
         var bloque7 = stage.insert(new Q.BlockNada({ x: 1134, y: 410}));
         var bloque8 = stage.insert(new Q.BlockNada({ x: 1168, y: 410}));
+	//Otras monedas
         var coin4 = stage.insert(new Q.Coin({ x: 1100, y: 320 }));
         var coin5 = stage.insert(new Q.Coin({ x: 1134, y: 320 }));
         var coin6 = stage.insert(new Q.Coin({ x: 1168, y: 320 }));
+	//Tuberias
         var piperIz = stage.insert(new Q.PiperLeftUp({ x: 1000, y: 450 }));
         var piperDr = stage.insert(new Q.PiperRightUp({ x: 1015, y: 450 }));
         var piperIzBase = stage.insert(new Q.PiperLeftDown({ x: 1000, y: 480 }));
         var piperDrBase = stage.insert(new Q.PiperRightDown({ x: 1015, y: 480 }));
-
+	//Creamos una "camara" que siga a mario centrada en el centro de este con cierto offset (libertad de movimiento de personaje)
         stage.add("viewport").follow(mario,{ x: true, y: false }); 
         stage.centerOn(150,380); //Cámara siguiendo a Mario
         stage.viewport.offsetX=-125;
@@ -97,10 +116,11 @@ var game = function() {
     });
 
 
-   /* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                                 START Y END GAME
-   -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+/*===========================================================================================
+=================================Comienzo y finalización=====================================
+=============================================================================================*/
 
+    //Menú/Pantalla de inicio
     Q.scene('startGame',function(stage) {
 		var play = stage.insert(new Q.UI.Button({
 	      asset: 'mainTitle.png',
@@ -117,7 +137,8 @@ var game = function() {
             Q.stageScene("HUD", 2);
 	    });
 	});
-
+	
+    //Menú/Pantalla de finalización
     Q.scene('endGame',function(stage) {
         var container = stage.insert(new Q.UI.Container({
           x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
@@ -135,9 +156,9 @@ var game = function() {
         container.fit(20);
       });
 
-/* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                                 HUD
-   -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+/*===========================================================================================
+=======================================HUD del juego=========================================
+=============================================================================================*/
     Q.scene("HUD",function(stage) {
         //Contador de monedas
 		Q.UI.Text.extend("Monedas",{ 
@@ -178,10 +199,9 @@ var game = function() {
         container.insert(new Q.Vidas());
 	});
 
-
-/* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                             MARIO
-   -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+/*===========================================================================================
+=====================================Lógica de Mario=========================================
+=============================================================================================*/
     Q.Sprite.extend("Mario", {
         init: function(p){
             this._super(p, {
@@ -198,14 +218,16 @@ var game = function() {
             this.add('2d, platformerControls, animation');
             this.on("killMario", "die");
 
-            this.on("bump.bottom",function(collision) { //Si aplasta un goomba lo mata
+            this.on("bump.bottom",function(collision) { 
+		//Si aplasta un goomba lo mata
                 if(collision.obj.isA("Goomba")) {
                     collision.obj.die();
                     this.p.vy = -200;
                     this.p.salto = true;
 
                 }
-                else if (collision.obj.isA("Bloopa")) { //Si aplasta un bloopa lo mata
+                else if (collision.obj.isA("Bloopa")) { 
+		    //Si aplasta un bloopa lo mata
                     collision.obj.p.gravity = 1;
                     collision.obj.die();
                     this.p.vy = -300;
@@ -276,9 +298,9 @@ var game = function() {
         }
     });
 
-/* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                               GOOMBA
-   -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+/*===========================================================================================
+=======================================GOOMBA================================================
+=============================================================================================*/
     Q.Sprite.extend("Goomba", {
         init: function(p){
             this._super(p, {
@@ -307,9 +329,9 @@ var game = function() {
      
     });
  
-/* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                               BLOOPA
-   -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+/*===========================================================================================
+=======================================BLOOPA================================================
+=============================================================================================*/
     Q.Sprite.extend("Bloopa", {
         init: function(p){
             this._super(p, {
@@ -340,9 +362,9 @@ var game = function() {
 
 
 
-/* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                               PRINCESS
-   -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+/*===========================================================================================
+=======================================Princesa==============================================
+=============================================================================================*/
     Q.Sprite.extend("Princess", { //No hace nada
 		init: function(p) {
 			this._super(p, {
@@ -352,9 +374,9 @@ var game = function() {
     });
 
 
-/* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                                COIN
-   -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+/*===========================================================================================
+=======================================MONEDA================================================
+=============================================================================================*/
     Q.Sprite.extend("Coin", {
         init: function(p){
             this._super(p, {
@@ -379,9 +401,10 @@ var game = function() {
         }
     });
 
-/* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                                BLOCK
-   -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+/*===========================================================================================
+=======================================Bloque================================================
+=============================================================================================*/
+//Se puede golpear y suelta vida
    Q.Sprite.extend("Block", {
     init: function(p) {
         this._super(p, {
@@ -412,9 +435,10 @@ var game = function() {
 
 });
 
-/* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                                BLOCK NADA
-   -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+/*===========================================================================================
+=======================================Bloque sin nada=======================================
+=============================================================================================*/
+//No suelta nada
    Q.Sprite.extend("BlockNada", {
     init: function(p) {
         this._super(p, {
@@ -436,9 +460,10 @@ var game = function() {
 
 });
 
-  /* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                                    BLOCK-COINS
-       -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+/*===========================================================================================
+=======================================Bloque de monedas=====================================
+=============================================================================================*/
+//Se puede golpear y suelta moneda
        Q.Sprite.extend("BlockCoins", {
         init: function(p) {
             this._super(p, {
@@ -453,7 +478,7 @@ var game = function() {
 
             this.on("bump.bottom", function(collision) {
                 if (collision.obj.isA("Mario")) {
-                    if ( /*this.p.contCoins < this.p.MaxCoins &&*/ !this.p.usado) {
+                    if (!this.p.usado) {
                         this.p.usado = true;
                         // Este bloque suelta una moneda
                         this.chain({ x: this.p.x, y: this.p.y - 30 }, .3, Q.Easing.Quadratic.Out, { delay: 0 });
@@ -474,9 +499,10 @@ var game = function() {
     });
 
 
-/* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                            DEFAULT ENEMY
-   -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+/*===========================================================================================
+=======================================Enemido por defecto===================================
+=============================================================================================*/
+    //Propiedad
     Q.component("defaultEnemy", {
         added: function() {
             this.entity.on("bump.left,bump.right,bump.bottom",function(collision) {
