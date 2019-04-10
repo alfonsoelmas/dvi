@@ -521,10 +521,12 @@ var game = function() {
 
     });
 
-    /* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                               1UP MUSHROOM
-   -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+
+/*===========================================================================================
+==========================================Seta=1up===========================================
+=============================================================================================*/
    Q.Sprite.extend("Mushroom1up", {
+	   
     init: function(p) {
         this._super(p, {
             asset: "1up_mushroom.gif",
@@ -548,7 +550,8 @@ var game = function() {
             }
         });
     },
-    step: function(dt) { //Se mueve
+    step: function(dt) { 
+	//Movimiento
         this.p.x += this.p.velocidad * dt;
     },
 });
@@ -570,9 +573,10 @@ var game = function() {
         },
     });
 
-    /* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                                       PIPERRIGHTUP  
-          -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+    
+/*===========================================================================================
+=======================================TUBERIADERECHASUBE====================================
+=============================================================================================*/
 
     Q.Sprite.extend("PiperRightUp", {
         init: function(p) {
@@ -585,9 +589,10 @@ var game = function() {
         },
     });
 
-    /* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                                    PIPERLEFTFDOWN
-       -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+
+/*===========================================================================================
+=======================================TUBERIAIZQUIERDABAJA==================================
+=============================================================================================*/
 
     Q.Sprite.extend("PiperLeftDown", {
         init: function(p) {
@@ -601,9 +606,10 @@ var game = function() {
         },
     });
 
-    /* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                                       PIPERRIGHTDOWN
-          -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
+
+/*===========================================================================================
+=======================================TuberiaDerechaBaja====================================
+=============================================================================================*/
 
     Q.Sprite.extend("PiperRightDown", {
         init: function(p) {
@@ -617,23 +623,27 @@ var game = function() {
     });
 
 
-/* -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                                LOAD
-   -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+*/
-    //Cargamos y compilamos las hojas de sprites con sus json
+
+/*===========================================================================================
+=======================================Carga de recursos=====================================
+=============================================================================================*/
+    //Cargamos y compilamos las hojas de sprites con sus json correspondientes
    Q.load(["mario_small.png", "mario_small.json", "goomba.png", "goomba.json", "bloopa.png", "bloopa.json", "princess.png", "mainTitle.png", "coin.png", "coin.json", "tiles.png", "block.json", "1up_mushroom.gif"], function() {
-        Q.compileSheets("mario_small.png", "mario_small.json", "coin.png", "coin.json");
-        Q.compileSheets("goomba.png", "goomba.json");
+        
+	Q.compileSheets("mario_small.png", "mario_small.json", "coin.png", "coin.json");
         Q.compileSheets("coin.png", "coin.json");
+	Q.compileSheets("goomba.png", "goomba.json");
         Q.compileSheets("tiles.png", "block.json");
         Q.compileSheets("bloopa.png", "bloopa.json");
         Q.loadTMX("level.tmx", function() {
             Q.stageScene("startGame");
         });
     });
-    //Cargamos los sonidos
+    //Carga de sonidos
     Q.load(["coin.mp3", "coin.ogg", "music_die.mp3", "music_die.ogg", "music_level_complete.mp3", "music_level_complete.ogg", "music_main.mp3", "music_main.ogg", "jump_small.mp3", "jump_small.ogg", "kill_enemy.mp3", "kill_enemy.ogg", "1up.mp3", "1up.ogg", "item_rise.mp3", "item_rise.ogg", "hit_head.mp3", "hit_head.ogg"]);
 
 
 
 };
+
+//Et voilá, juego implementado con quintus!
