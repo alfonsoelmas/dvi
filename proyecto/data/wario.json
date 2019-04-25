@@ -1,0 +1,7 @@
+{
+	"warioAnda": {"sx":584,"sy":95,"tileW":28,"tileH":30,"frames":4},
+	"warioAndaAgachado": {"sx":584,"sy":131,"tileW":30,"tileH":23,"frames":3},
+	"warioPlaca": {"sx":584,"sy":231,"tileW":30,"tileH":30,"frames":8},
+	"warioCuletazo": {"sx":587,"sy":344,"tileW":30,"tileH":32,"frames":3},
+	"warioQuieto": {"sx":585,"sy":192,"tileW":21,"tileH":31,"frames":1}
+}
