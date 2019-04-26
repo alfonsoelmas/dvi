@@ -25,13 +25,13 @@ var game = function() {
 =============================================================================================*/
 
     Q.animations("wario", {
-        run_right: { frames: [1,2,3], rate: 1/6, loop:false, next: "stand_right" }, 
-        run_left: { frames: [15,16,17], rate:1/6, loop:false, next: "stand_left" },
-        stand_right: { frames: [0] },
-        stand_left: { frames: [14] },
-        jump_right: { frames: [4], loop: false, rate:1, next: "stand_right" },
-        jump_left: { frames: [18], loop: false, rate:1, next: "stand_left" },
-        dieW: { frames: [12], rate:1, loop: false, trigger: "deadW"}
+        run_right:  { frames: [1,2,3,4], rate: 1/6, loop:false,  flip: false,  next: "stand_right" }, 
+        run_left:   { frames: [1,2,3,4], rate:1/6, loop:false, flip:"x",     next: "stand_left" },
+        stand_right: { frames: [0],flip: false },
+        stand_left: { frames: [0],flip:"x"   },
+        jump_right: { frames: [1], loop: false, rate:1, flip: false,next: "stand_right" },
+        jump_left:  { frames: [1], loop: false, rate:1, flip:"x",   next: "stand_left" },
+        dieW:       { frames: [0], rate:1, loop: false, trigger: "deadW"} //TODO, AÑADIR
     });
 
 
@@ -45,7 +45,7 @@ var game = function() {
 
     /*Añadimos los componentes del nivel 1 en nuestro escenario*/
 	//Protagonista
-        var wario = stage.insert(new Q.Mario({ x: 150, y: 380 }));
+        var wario = stage.insert(new Q.Wario({ x: 150, y: 380 }));
 
 	
 	//Creamos una "camara" que siga a mario centrada en el centro de este con cierto offset (libertad de movimiento de personaje)
@@ -145,7 +145,7 @@ var game = function() {
     Q.Sprite.extend("Wario", {
         init: function(p){
             this._super(p, {
-                sheet: "warioAnda",
+                sheet: "wario",
                 sprite: "wario",
                 frame: 0,
                 x: 150,
