@@ -15,12 +15,11 @@ var playGame = function() {
   Game.setBoard(0,new Starfield(20,0.4,100,true))
   Game.setBoard(1,new Starfield(50,0.6,100))
   Game.setBoard(2,new Starfield(100,1.0,50));
-/*
+
   var board = new GameBoard();
   board.add(new PlayerShip());
   board.add(new Level(level1,winGame));
   Game.setBoard(3,board);
-*/
 }
 
 var winGame = function() {
@@ -43,5 +42,5 @@ var loseGame = function() {
 // y este después de realizar la inicialización llamará a
 // startGame
 window.addEventListener("load", function() {
-  Game.initialize("game",sprites,playGame);
+  Game.initialize("game",sprites,startGame);
 });
